@@ -1,6 +1,6 @@
 module github.com/qjfoidnh/BaiduPCS-Go
 
-go 1.23
+go 1.26
 
 require (
 	github.com/GeertJohan/go.incremental v1.0.0
@@ -18,10 +18,12 @@ require (
 	github.com/tidwall/gjson v1.18.0
 	github.com/urfave/cli v1.22.5
 	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
-	golang.org/x/sys v0.25.0
+	golang.org/x/sys v0.42.0
 )
 
 require (
+	github.com/chromedp/cdproto v0.0.0-20260321001828-e3e3800016bc
+	github.com/chromedp/chromedp v0.15.1
 	github.com/rs/dnscache v0.0.0-20230804202142-fc85eb664529
 	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
 )
@@ -31,8 +33,13 @@ require (
 	github.com/astaxie/beego v1.12.3 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
+	github.com/chromedp/sysutil v1.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
 	github.com/daaku/go.zipexe v1.0.2 // indirect
+	github.com/go-json-experiment/json v0.0.0-20260214004413-d219187c3433 // indirect
+	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/gobwas/pool v0.2.1 // indirect
+	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect

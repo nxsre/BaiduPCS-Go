@@ -405,6 +405,12 @@ func main() {
 		BaiduPCS-Go login -username=liuhua
 		BaiduPCS-Go login -bduss=123456789 -stoken=atahsrweoog
 		BaiduPCS-Go login -cookies="BDUSS=xxxxx; BAIDUID=yyyyyy; STOKEN=zzzzz; ...."
+		BaiduPCS-Go login -cdp
+		BaiduPCS-Go login -cdp -cdp-url=http://127.0.0.1:9222
+
+	CDP 浏览器登录 (推荐):
+		自动打开 Chrome/Chromium，在 pan.baidu.com 完成登录后自动读取 Cookie。
+		连接已有浏览器: 先以 --remote-debugging-port=9222 启动 Chrome，再使用 -cdp-url。
 
 	常规登录:
 		按提示一步一步来即可.
@@ -420,7 +426,24 @@ func main() {
 			After:    saveFunc,
 			Action: func(c *cli.Context) error {
 				var bduss, ptoken, stoken, cookies string
-				if c.IsSet("cookies") {
+				if c.Bool("cdp") {
+					timeout := c.Int("cdp-timeout")
+					if timeout <= 0 {
+						timeout = 300
+					}
+					var err error
+					bduss, ptoken, stoken, cookies, err = pcscommand.RunLoginCDP(pcscommand.CDPLoginOptions{
+						RemoteURL:   c.String("cdp-url"),
+						ExecPath:    c.String("cdp-exec"),
+						UserDataDir: c.String("cdp-user-data"),
+						TimeoutSec:  timeout,
+						TargetURL:   c.String("cdp-target"),
+					})
+					if err != nil {
+						fmt.Println(err)
+						return err
+					}
+				} else if c.IsSet("cookies") {
 					cookies = c.String("cookies")
 				} else if c.IsSet("bduss") {
 					bduss = c.String("bduss")
@@ -471,6 +494,32 @@ func main() {
 				cli.StringFlag{
 					Name:  "cookies",
 					Usage: "使用百度 Cookies 来登录百度账号",
+				},
+				cli.BoolFlag{
+					Name:  "cdp",
+					Usage: "通过 CDP 打开浏览器，在 pan.baidu.com 登录后自动获取 Cookie",
+				},
+				cli.StringFlag{
+					Name:  "cdp-url",
+					Usage: "CDP 远程调试地址，如 http://127.0.0.1:9222（连接已启动的 Chrome）",
+				},
+				cli.StringFlag{
+					Name:  "cdp-exec",
+					Usage: "Chrome/Chromium 可执行文件路径（默认自动检测）",
+				},
+				cli.StringFlag{
+					Name:  "cdp-user-data",
+					Usage: "Chrome 用户数据目录，可复用已有登录会话",
+				},
+				cli.IntFlag{
+					Name:  "cdp-timeout",
+					Usage: "CDP 登录等待超时（秒），默认 300",
+					Value: 300,
+				},
+				cli.StringFlag{
+					Name:  "cdp-target",
+					Usage: "CDP 打开的登录页 URL，默认 https://pan.baidu.com",
+					Value: "https://pan.baidu.com",
 				},
 			},
 		},
